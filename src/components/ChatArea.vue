@@ -30,11 +30,18 @@
 </template>
 
 <script>
+import ws from '@/net/socket'
 export default {
   name: 'ChatArea',
   data () {
     return {
     }
+  },
+  mounted () {
+    ws.send('123');
+    ws.message((m)=>{
+      console.log('收到的信息'+m)
+    })
   }
 }
 </script>

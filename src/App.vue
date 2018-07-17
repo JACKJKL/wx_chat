@@ -59,10 +59,16 @@
 
 <script>
 import ChatItem from '@/components/ChatItem'
+import ws from '@/net/socket'
+
 export default {
   name: 'App',
   components: {
     ChatItem: ChatItem
+  },
+
+  mounted() {
+    
   }
 }
 </script>
