@@ -7,7 +7,7 @@
 
 <template>
   <div id="app">
-    <main class="main">
+    <div class="main">
       <div class="main-inner">
         <!-- 左边栏 -->
         <div class="sd">
@@ -53,7 +53,7 @@
           <router-view/>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
