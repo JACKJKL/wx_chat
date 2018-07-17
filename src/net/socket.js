@@ -12,7 +12,7 @@ class WSocket {
     }
   }
 
-  send (msg) {
+  open (msg="open") {
     this.wss.onopen = function() {
       this.send(msg);
     };
@@ -23,6 +23,11 @@ class WSocket {
       f(evt.data);
     };
   }
+  
+  send (msg) {
+    this.wss.send(msg);
+  }
+
 }
 
 export default new WSocket();

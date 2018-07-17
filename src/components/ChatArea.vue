@@ -26,7 +26,7 @@
 
       div.action
         span.notice 按ctrl+enter发送
-        a.u-send(href="javascript:void(0)") 发送
+        a.u-send(href="javascript:void(0)" @click="send") 发送
 </template>
 
 <script>
@@ -37,11 +37,12 @@ export default {
     return {
     }
   },
+  methods: {
+    send () {
+      ws.send('hello ' + new Date());
+    }
+  },
   mounted () {
-    ws.send('123');
-    ws.message((m)=>{
-      console.log('收到的信息'+m)
-    })
   }
 }
 </script>

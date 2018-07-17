@@ -59,7 +59,6 @@
 
 <script>
 import ChatItem from '@/components/ChatItem'
-import ws from '@/net/socket'
 
 export default {
   name: 'App',
@@ -67,8 +66,21 @@ export default {
     ChatItem: ChatItem
   },
 
-  mounted() {
-    
+  methods: {
+  },
+  mounted () {
+    //初始化用户信息
+    const u = {
+      username: '豆豆'+ Math.round(Math.random() * 100) +'号',
+      uid: Number(new Date())
+    }
+    this.$store.state.user = u;
+    // 初始化连接信息与接收
+    this.$store.commit('initConn', function(msg) {
+      console.log('-----begin-----');
+      console.log(msg);
+      console.log('-----end-----');
+    })
   }
 }
 </script>
