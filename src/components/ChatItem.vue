@@ -32,15 +32,12 @@
 }
 </style>
 
-<template>
-  <div :class="{current}" class="chat-item" >
-    <div class="avatar">
-      <img src="@/assets/img/default_hd.jpg">
-    </div>
-    <div class="name">
-      <slot></slot>
-    </div>
-  </div>
+<template lang="pug">
+  div.chat-item(:class="{current}")
+    div.avatar
+      img(src="@/assets/img/default_hd.jpg")
+    div.name
+      slot
 </template>
 
 <script>
