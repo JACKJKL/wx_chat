@@ -13,7 +13,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     initConn (state, callback) {
-      ws.open(JSON.stringify(state.user));
+      ws.open(state.user);
       ws.message(callback);
     }
   }

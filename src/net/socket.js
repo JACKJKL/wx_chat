@@ -1,3 +1,8 @@
+const defaultData = {
+  is_new: false,
+  type: "text"
+}
+
 class WSocket {
   wss;
 
@@ -12,9 +17,13 @@ class WSocket {
     }
   }
 
-  open (msg="open") {
+  open (user) {
+    user['is_new'] = true;
+    user['to'] = 'all';
+    user['data'] = user.username + '上线啦';
+    user = Object.assign(defaultData, user);
     this.wss.onopen = function() {
-      this.send(msg);
+      this.send(JSON.stringify(user));
     };
   }
 
