@@ -77,9 +77,7 @@ export default {
     this.$store.state.user = u;
     // 初始化连接信息与接收
     this.$store.commit('initConn', function(msg) {
-      console.log('-----begin-----');
       console.log(msg);
-      console.log('-----end-----');
     })
   }
 }

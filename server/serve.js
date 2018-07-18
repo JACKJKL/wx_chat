@@ -14,7 +14,7 @@ function connection(ws) {
     /**
      * 数据格式 json
      * {
-     *   is_new： false,
+     *   event: reg/msg,
      *   from: uid,
      *   to: uid,
      *   username: username,
@@ -23,17 +23,19 @@ function connection(ws) {
      * }
      */
     const msg = JSON.parse(data);
-    console.log(msg);
     //添加到用户池
-    if (msg.is_new) {
+    if (msg.event == 'reg') {
       addclientList(ws, msg);
-    }
+      broadcast(ws, msg, true);
+    } 
 
-    // 发送
-    if (msg.to == 'all') {
-      broadcast(ws, msg);
-    } else {
-      sendUser(msg);
+    if (msg.event == 'msg') {
+      // 发送
+      if (msg.to == 'all') {
+        broadcast(ws, msg);
+      } else {
+        sendUser(msg);
+      }
     }
   });
 }
@@ -44,6 +46,8 @@ function addclientList (ws, msg) {
     ws: ws,
     username: msg.username
   }
+  console.log(clientList)
+  console.log('----------')
   clientList[msg.uid] = uid;
 }
 
@@ -57,22 +61,28 @@ function sendUser(msg) {
 }
 
 /**
- * 广播 除了自己
+ * 广播
  * @return mixed
  */
-function broadcast (ws, msg) {
-  wss.clients.forEach(function each(client) {
-    if (client === ws && client.readyState === WebSocket.OPEN) {
-      for (let x in clientList) {
-        console.log(x);
-      }
-      //发给自己
-      ws.send('myself');
-    } else {
-      //发给其他人
-      client.send(sendFormatMsg(msg));
-    }
-  });
+function broadcast (ws, msg, is_self=false) {
+  msg['event'] = 'msg';
+  const _send = '{"event":"msg","from":1531930917619,"to":"all","type":"text","data":"豆豆67号上线啦"}';
+  // wss.clients.forEach(function each(client) {
+    
+  //   if (client === ws && client.readyState === WebSocket.OPEN) {
+  //     //发给自己
+  //     // if (is_self) {
+  //     //   client.send("{\"a\": 1}");
+  //     // }
+  //   }
+  //   client.send('i');
+  //   console.log('send');
+  // });
+  console.log(clientList.length)
+  for (let c in clientList) {
+    console.log(c);
+    clientList[c].ws.send(_send)
+  }
 }
 
 function sendFormatMsg (msg, event='msg') {
@@ -87,7 +97,6 @@ function sendFormatMsg (msg, event='msg') {
    *   data: data
    * }
    */
-  delete(msg.is_new);
   msg.event = event;
   return JSON.stringify(msg);
 }
