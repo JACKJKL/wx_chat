@@ -39,7 +39,10 @@ export default {
   },
   methods: {
     send () {
-      ws.send('hello ' + new Date());
+      const conf = {
+        data: 'hahaha '+ Number(new Date()),
+      };
+      this.$store.commit('send', conf)
     }
   },
   mounted () {

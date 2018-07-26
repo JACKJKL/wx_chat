@@ -12,11 +12,11 @@ wss.on('connection', connection);
 function connection(ws) {
   ws.on('message', function incoming(data) {
     /**
-     * 数据格式 json
+     * 接收数据格式 json
      * {
      *   event: reg/msg,
      *   from: uid,
-     *   to: uid,
+     *   to: uid/all,
      *   username: username,
      *   type: text,
      *   data: data
@@ -62,23 +62,22 @@ function sendUser(msg) {
  * @return mixed
  */
 function broadcast (ws, msg, is_self=false) {
-  msg['event'] = 'msg';
-  const _send = '{"event":"msg","from":1531930917619,"to":"all","type":"text","data":"豆豆67号上线啦"}';
   wss.clients.forEach(function each(client) {
     if (client === ws && client.readyState === WebSocket.OPEN) {
       //发给自己
       if (is_self) {
-        client.send("{\"a\": 1}");
+        console.log('2')
+        client.send( sendFormatMsg(msg) );
       }
     } else {
-      client.send(_send);
+      client.send( sendFormatMsg(msg) );
     }
   });
 }
 
 function sendFormatMsg (msg, event='msg') {
   /**
-   * 数据格式 json
+   * 发送数据格式 json
    * {
    *   event: 'msg',
    *   from: uid,

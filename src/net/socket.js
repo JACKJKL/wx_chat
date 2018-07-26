@@ -11,27 +11,21 @@ class WSocket {
   wss;
 
   constructor() {
-    if (! "WebSocket" in window) {
+    if (!"WebSocket" in window) {
       alert("您的浏览器不支持 WebSocket!");
     }
+  }
+
+  open (c) {
+    // 貌似不在短时间内调用onopen 会自动调用，所以在此处new
     try {
       this.wss = new WebSocket("ws://localhost:8081");
     } catch( err ) {
       alert('连接服务器失败');
     }
-  }
-
-  open (user) {
-    const u = {
-      event: 'reg',
-      from: user.uid,
-      username: user.username,
-      to: 'all',
-      data: user.username + '上线啦'
-    }
-    user = Object.assign(defaultData, u);
+    c = Object.assign(defaultData, c);
     this.wss.onopen = function() {
-      this.send(JSON.stringify(user));
+      this.send(JSON.stringify(c));
     };
   }
 
@@ -41,8 +35,9 @@ class WSocket {
     };
   }
   
-  send (msg) {
-    this.wss.send(msg);
+  send (c) {
+    c = Object.assign(defaultData, c);
+    this.wss.send(JSON.stringify(c));
   }
 
 }

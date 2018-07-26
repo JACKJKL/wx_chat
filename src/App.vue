@@ -7,6 +7,13 @@
 
 <template>
   <div id="app">
+    <div id="mask" v-if="$store.state.mask">
+      <div class="panel">
+        <div>快帮自己取个名字吧。</div>
+        <div><input type="text" v-model="$store.state.user.username" maxlength="6" ></div>
+        <div class="ok"><span @click="ok">确定</span></div>
+      </div>
+    </div>
     <div class="main">
       <div class="main-inner">
         <!-- 左边栏 -->
@@ -70,15 +77,30 @@ export default {
   },
   mounted () {
     //初始化用户信息
-    const u = {
-      username: '豆豆'+ Math.round(Math.random() * 100) +'号',
-      uid: Number(new Date())
+    let user = localStorage.user;
+    if (user) {
+      this.$store.state.user = JSON.parse(user);
+    } else {
+      this.$store.state.user.uid = Number(new Date());
     }
-    this.$store.state.user = u;
-    // 初始化连接信息与接收
-    this.$store.commit('initConn', function(msg) {
-      console.log(msg);
-    })
+  },
+  methods : {
+    ok () {
+      this.$store.state.user.username = this.$store.state.user.username.replace(' ','').replace('　', '');
+      if (this.$store.state.user.username == '') {
+        return;
+      }
+      const u = {
+        'uid': this.$store.state.user.uid,
+        'username': this.$store.state.user.username
+      }
+      localStorage.user = JSON.stringify(u);
+      // 初始化连接信息与接收
+      this.$store.commit('initConn', function(msg) {
+        console.log(msg);
+      })
+      this.$store.state.mask = false;
+    }
   }
 }
 </script>
