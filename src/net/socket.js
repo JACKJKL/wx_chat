@@ -1,6 +1,7 @@
 const defaultData = {
   event: 'msg',
   from: '',
+  username: '',
   to: "all",
   type: 'text',
   data: ''
@@ -24,6 +25,7 @@ class WSocket {
     const u = {
       event: 'reg',
       from: user.uid,
+      username: user.username,
       to: 'all',
       data: user.username + '上线啦'
     }

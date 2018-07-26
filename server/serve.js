@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 
 // 用户池
-let clientList = [];
+let clientList = {};
 
 const wss = new WebSocket.Server({
   port: 8081,
@@ -27,9 +27,8 @@ function connection(ws) {
     if (msg.event == 'reg') {
       addclientList(ws, msg);
       broadcast(ws, msg, true);
-    } 
-
-    if (msg.event == 'msg') {
+    }
+    else if (msg.event == 'msg') {
       // 发送
       if (msg.to == 'all') {
         broadcast(ws, msg);
@@ -46,9 +45,7 @@ function addclientList (ws, msg) {
     ws: ws,
     username: msg.username
   }
-  console.log(clientList)
-  console.log('----------')
-  clientList[msg.uid] = uid;
+  clientList[msg.from] = uid;
 }
 
 /**
@@ -61,28 +58,22 @@ function sendUser(msg) {
 }
 
 /**
- * 广播
+ * 广播  貌似用到反射，此处为引用传递
  * @return mixed
  */
 function broadcast (ws, msg, is_self=false) {
   msg['event'] = 'msg';
   const _send = '{"event":"msg","from":1531930917619,"to":"all","type":"text","data":"豆豆67号上线啦"}';
-  // wss.clients.forEach(function each(client) {
-    
-  //   if (client === ws && client.readyState === WebSocket.OPEN) {
-  //     //发给自己
-  //     // if (is_self) {
-  //     //   client.send("{\"a\": 1}");
-  //     // }
-  //   }
-  //   client.send('i');
-  //   console.log('send');
-  // });
-  console.log(clientList.length)
-  for (let c in clientList) {
-    console.log(c);
-    clientList[c].ws.send(_send)
-  }
+  wss.clients.forEach(function each(client) {
+    if (client === ws && client.readyState === WebSocket.OPEN) {
+      //发给自己
+      if (is_self) {
+        client.send("{\"a\": 1}");
+      }
+    } else {
+      client.send(_send);
+    }
+  });
 }
 
 function sendFormatMsg (msg, event='msg') {
