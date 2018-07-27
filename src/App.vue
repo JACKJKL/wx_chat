@@ -25,7 +25,7 @@
                 <img src="@/assets/img/default_hd.jpg">
               </div>
               <div class="info">
-                <div class="name">猫猫</div>
+                <div class="name">{{ $store.state.user.username }}</div>
                 <div class="menu">
                   <i class="iconfont icon-menu"></i>
                 </div>
@@ -50,8 +50,11 @@
           <!-- 列表 -->
           <div class="m-lst-box topnav_box">
             <div class="m-lst">
-              <template v-for="x in 'abcdefghijklmnopqrstyvwxyz'">
-                <ChatItem>野人{{x}}号</ChatItem>
+              <template>
+                <ChatItem @click.native="tapChat('all', '群聊')">群聊</ChatItem>
+              </template>
+              <template v-for="x in $store.state.userList" v-if="x.uid != $store.state.user.uid">
+                <ChatItem @click.native="tapChat(x.uid, x.username)">{{ x.username }}</ChatItem>
               </template>
             </div>
           </div>
@@ -100,6 +103,13 @@ export default {
         console.log(msg);
       })
       this.$store.state.mask = false;
+    },
+
+    tapChat (who, name) {
+      this.$store.state.currentChat = {
+        who: who,
+        name: name
+      }
     }
   }
 }

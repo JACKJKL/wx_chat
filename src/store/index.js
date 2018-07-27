@@ -10,6 +10,11 @@ const store = new Vuex.Store({
       username: '',
       uid: ''
     },
+    userList: [],
+    currentChat: {
+      who: 'all',
+      name: '群聊'
+    },
     mask: true
   },
   mutations: {
@@ -22,7 +27,20 @@ const store = new Vuex.Store({
         data: state.user.username + '上线啦'
       }
       ws.open(u);
-      ws.message(callback);
+      ws.message((msg)=>{
+        msg = JSON.parse(msg);
+        if (msg.event == 'msg') {
+          // 消息
+          callback(msg);
+        }
+        else if (msg.event == 'user') {
+          //用户列表信息
+          if (state.userList != msg.data) {
+            state.userList = msg.data;
+          }
+          
+        }
+      }); 
     },
 
     send (state, conf) {

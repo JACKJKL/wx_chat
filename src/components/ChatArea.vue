@@ -6,7 +6,7 @@
 <template lang="pug">
   div.chat-area
     div.box-hd
-      div.title 南源
+      div.title {{ $store.state.currentChat.name }}
 
     div.chat-bd
       div.msg-item.clearfix(v-for="x in '123'")
@@ -37,12 +37,24 @@ export default {
     return {
     }
   },
+  watch: {
+    '$store.state.mask':{
+      handler(curVal,oldVal){
+        //监听变量变化，发送请求
+        this.initChatArea();
+      },
+      deep:true
+    }
+  },
   methods: {
     send () {
       const conf = {
         data: 'hahaha '+ Number(new Date()),
       };
       this.$store.commit('send', conf)
+    },
+    initChatArea () {
+      console.log('aaa');
     }
   },
   mounted () {
