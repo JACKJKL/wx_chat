@@ -4,29 +4,29 @@
 </style>
 
 <template lang="pug">
-  div.chat-area
-    div.box-hd
-      div.title {{ $store.state.currentChat.name }}
+div.chat-area
+  div.box-hd
+    div.title {{ $store.state.currentChat.name }}
 
-    div.chat-bd
-      div.msg-item.clearfix(v-for="x in '123'")
-        div 今天天气如何
+  div.chat-bd
+    div.msg-item.clearfix(v-for="x in '123'")
+      div 今天天气如何
 
-    div.m-ft
-      ul.tool-tab
-        li
-          i.iconfont.icon-face
-        li
-          i.iconfont.icon-cut
-        li
-          i.iconfont.icon-file
-      div.content
-        div.input(contenteditable="true")
-          img(src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3062734635,4183904616&fm=96")
+  div.m-ft
+    ul.tool-tab
+      li
+        i.iconfont.icon-face
+      li
+        i.iconfont.icon-cut
+      li
+        i.iconfont.icon-file
+    div.content
+      div.input(contenteditable="true")
+        img(src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3062734635,4183904616&fm=96")
 
-      div.action
-        span.notice 按ctrl+enter发送
-        a.u-send(href="javascript:void(0)" @click="send") 发送
+    div.action
+      span.notice 按ctrl+enter发送
+      a.u-send(href="javascript:void(0)" @click="send") 发送
 </template>
 
 <script>

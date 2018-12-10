@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 
+console.log('--------begin--------');
 // 用户池
 let clientList = {};
 //在线用户
@@ -31,9 +32,9 @@ function connection(ws) {
       broadcast(ws, sendFormatMsg(msg, 'reg'));
     }
     else if (msg.event == 'msg') {
-      // 发送
+      // 发送 所有人或者个人
       if (msg.to == 'all') {
-        broadcast(ws, msg);
+        broadcast(ws, sendFormatMsg(msg));
       } else {
         sendUser(msg);
       }
@@ -52,8 +53,6 @@ function addclientList (ws, msg) {
 
 /**
  * 发送给谁
- * @param  {[type]} msg [description]
- * @return {[type]}     [description]
  */
 function sendUser(msg) {
 
@@ -65,17 +64,20 @@ function sendUser(msg) {
  */
 function broadcast (ws, msg, is_self=false) {
   wss.clients.forEach(function each(client) {
+    // 判断是否是自己
     if (client === ws && client.readyState === WebSocket.OPEN) {
       //发给自己
       if (is_self) {
-        client.send( sendFormatMsg(msg) );
+        client.send(msg);
       }
     } else {
-      client.send( sendFormatMsg(msg) );
+      client.send(msg);
     }
   });
 }
-
+/**
+ * 格式化发送信息格式
+ */
 function sendFormatMsg (msg, event='msg') {
   /**
    * 发送数据格式 json
@@ -93,8 +95,7 @@ function sendFormatMsg (msg, event='msg') {
 }
 
 /**
- * 计算存在的用户
- * @return {[type]} [description]
+ * 计算还在线上的用户
  */
 function computeLive() {
   let _temp = [];
@@ -116,8 +117,7 @@ function computeLive() {
 }
 
 /**
- * 在线用户信息分发
- * @return {[type]} [description]
+ * 在线用户列表信息分发
  */
 function sendAllLive() {
   const msg = {
@@ -126,7 +126,7 @@ function sendAllLive() {
     to: 'all',
     username: 'server',
     type: 'text',
-    data: clientLive
+    data: clientLive  //将所有在线用户列表分发给所有在线用户，简便处理
   };
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {

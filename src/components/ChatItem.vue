@@ -33,11 +33,11 @@
 </style>
 
 <template lang="pug">
-  div.chat-item(:class="{current}")
-    div.avatar
-      img(src="@/assets/img/default_hd.jpg")
-    div.name
-      slot
+div.chat-item(:class="{current}")
+  div.avatar
+    img(src="@/assets/img/default_hd.jpg")
+  div.name
+    slot
 </template>
 
 <script>
