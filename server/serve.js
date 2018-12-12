@@ -1,11 +1,12 @@
 const WebSocket = require('ws');
 
 console.log('--------begin--------');
-// 用户池
+// 存储用户池
 let clientList = {};
-//在线用户
+// 存储在线用户
 let clientLive = [];
 
+// 开启websocket 端口监听
 const wss = new WebSocket.Server({
   port: 8081,
 });
@@ -28,12 +29,14 @@ function connection(ws) {
     const msg = JSON.parse(data);
     //添加到用户池
     if (msg.event == 'reg') {
+      console.log(msg.username+'上线');
       addclientList(ws, msg);
       broadcast(ws, sendFormatMsg(msg, 'reg'));
     }
     else if (msg.event == 'msg') {
       // 发送 所有人或者个人
       if (msg.to == 'all') {
+        console.log('群发: '+msg.username+' 给所有人发送: '+ msg.data);
         broadcast(ws, sendFormatMsg(msg));
       } else {
         sendUser(msg);
@@ -55,7 +58,9 @@ function addclientList (ws, msg) {
  * 发送给谁
  */
 function sendUser(msg) {
-
+  console.log('私聊: '+msg.username+' 给编号'+msg.to+'发送: '+ msg.data);
+  const sendObj = clientList[msg.to];
+  sendObj.ws.send( sendFormatMsg(msg) );
 }
 
 /**
@@ -135,6 +140,6 @@ function sendAllLive() {
   });
 }
 
-// 每隔一段时间定时计算在线用户及分发数据
+// 每隔一段时间定时计算在线用户及分发在线数据
 setInterval(computeLive,1000*5);
 setInterval(sendAllLive,1000*5);

@@ -53,7 +53,7 @@
               <template>
                 <ChatItem @click.native="tapChat('all', '群聊')">群聊</ChatItem>
               </template>
-              <template v-for="x in $store.state.userList" v-if="x.uid != $store.state.user.uid">
+              <template v-for="x in activeUsers">
                 <ChatItem @click.native="tapChat(x.uid, x.username)">{{ x.username }}</ChatItem>
               </template>
             </div>
@@ -76,8 +76,6 @@ export default {
     ChatItem: ChatItem
   },
 
-  methods: {
-  },
   mounted () {
     //初始化用户信息
     let user = localStorage.user;
@@ -86,8 +84,24 @@ export default {
     } else {
       this.$store.state.user.uid = Number(new Date());
     }
+    // 有历史直接初始化
+    this.$store.commit('initConn', this.msgCallback)
+    this.$store.state.mask = false;
   },
+
+  computed: {
+    // 写成计算属性 排除本身 效率更高
+    activeUsers () {
+      return this.$store.state.userList.filter( user=> {
+        return user.uid != this.$store.state.user.uid;
+      })
+    }
+  },
+
   methods : {
+    msgCallback(msg) {
+      console.log(msg)
+    },
     ok () {
       this.$store.state.user.username = this.$store.state.user.username.replace(' ','').replace('　', '');
       if (this.$store.state.user.username == '') {
@@ -98,10 +112,8 @@ export default {
         'username': this.$store.state.user.username
       }
       localStorage.user = JSON.stringify(u);
-      // 初始化连接信息与接收
-      this.$store.commit('initConn', function(msg) {
-        console.log(msg);
-      })
+      // 初始化连接信息 msg类型信息接收函数注册
+      this.$store.commit('initConn', this.msgCallback)
       this.$store.state.mask = false;
     },
 

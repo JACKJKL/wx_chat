@@ -49,6 +49,7 @@ export default {
   methods: {
     send () {
       const conf = {
+        to: this.$store.state.currentChat.who, //发送给当前窗口聊天对象
         data: 'hahaha '+ Number(new Date()),
       };
       this.$store.commit('send', conf)

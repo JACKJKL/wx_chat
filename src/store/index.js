@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     mask: true
   },
   mutations: {
+    // 初始化连接 注册
     initConn (state, callback) {
       const u = {
         event: 'reg',
