@@ -51,10 +51,10 @@
           <div class="m-lst-box topnav_box">
             <div class="m-lst">
               <template>
-                <ChatItem @click.native="tapChat('all', '群聊')">群聊</ChatItem>
+                <ChatItem :id="'all'" @click.native="tapChat('all', '群聊')">群聊</ChatItem>
               </template>
               <template v-for="x in activeUsers">
-                <ChatItem @click.native="tapChat(x.uid, x.username)">{{ x.username }}</ChatItem>
+                <ChatItem :id="x.uid" @click.native="tapChat(x.uid, x.username)">{{ x.username }}</ChatItem>
               </template>
             </div>
           </div>
@@ -81,12 +81,12 @@ export default {
     let user = localStorage.user;
     if (user) {
       this.$store.state.user = JSON.parse(user);
+      // 有历史直接初始化
+      this.$store.commit('initConn', this.msgCallback)
+      this.$store.state.mask = false;
     } else {
       this.$store.state.user.uid = Number(new Date());
     }
-    // 有历史直接初始化
-    this.$store.commit('initConn', this.msgCallback)
-    this.$store.state.mask = false;
   },
 
   computed: {
@@ -103,7 +103,7 @@ export default {
       console.log(msg)
     },
     ok () {
-      this.$store.state.user.username = this.$store.state.user.username.replace(' ','').replace('　', '');
+      this.$store.state.user.username = this.$store.state.user.username.replace('^\s*','').replace('\s*$', '').substr(0, 8);
       if (this.$store.state.user.username == '') {
         return;
       }

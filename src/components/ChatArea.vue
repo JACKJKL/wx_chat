@@ -8,9 +8,16 @@ div.chat-area
   div.box-hd
     div.title {{ $store.state.currentChat.name }}
 
-  div.chat-bd
-    div.msg-item.clearfix(v-for="x in '123'")
-      div 今天天气如何
+  div.chat-bd(ref="chatbox")
+    div.empty 暂时没有新消息
+    div.msg-item.msg-item-left.clearfix(v-for="x in '123'")
+      div.nt-item
+        img.image(src="@/assets/img/default_hd.jpg")
+        div.content 可垃圾咯啦咯啦咯啦咯啦咯啦咯啦咯火辣辣啦啦啦啦啦啦啦啦芭芭拉巴巴爸爸火辣辣啦啦啦啦啦啦啦啦芭芭拉巴巴爸爸
+    div.msg-item.msg-item-right.clearfix(v-for="x in '123'")
+      div.nt-item
+        div.content 可垃圾咯啦可垃圾咯啦咯啦咯啦咯啦咯啦咯啦咯火辣辣啦啦啦啦啦啦啦啦芭芭拉巴巴爸爸火辣辣啦啦啦啦啦啦啦啦芭芭拉巴巴爸爸
+        img.image(src="@/assets/img/default_hd.jpg")
 
   div.m-ft
     ul.tool-tab
@@ -21,8 +28,7 @@ div.chat-area
       li
         i.iconfont.icon-file
     div.content
-      div.input(contenteditable="true")
-        img(src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3062734635,4183904616&fm=96")
+      div.input(contenteditable="true" ref="input")
 
     div.action
       span.notice 按ctrl+enter发送
@@ -44,21 +50,36 @@ export default {
         this.initChatArea();
       },
       deep:true
+    },
+    '$store.state.currentChat.who': {
+      handler(curVal, oldVal) {
+        this._boxToBottom();
+      }
     }
   },
   methods: {
     send () {
+      let content = this.$refs.input.innerHTML;
+      content = content.replace('^\s*','').replace('\s*$', '').substr(0, 200); // max 200
+      if (!content) {
+        return;
+      }
       const conf = {
         to: this.$store.state.currentChat.who, //发送给当前窗口聊天对象
-        data: 'hahaha '+ Number(new Date()),
+        data: content,
       };
       this.$store.commit('send', conf)
+      
     },
     initChatArea () {
       console.log('aaa');
+    },
+    _boxToBottom () {
+      this.$refs.chatbox.scrollTop = this.$refs.chatbox.scrollHeight;
     }
   },
   mounted () {
+    this._boxToBottom();
   }
 }
 </script>

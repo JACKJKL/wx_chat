@@ -26,6 +26,17 @@
       border-radius: 3px;
     }
   }
+  .new-msg {
+    position: relative;
+    &:after {
+      content: '';
+      border: 5px solid red;
+      position: absolute;
+      top: -5px;
+      right: 5px;
+      border-radius: 50%;
+    }
+  }
   .name {
     &:extend(.text);
   }
@@ -33,8 +44,8 @@
 </style>
 
 <template lang="pug">
-div.chat-item(:class="{current}")
-  div.avatar
+div.chat-item(:class="{'current': isCurrent}")
+  div.avatar.new-msg
     img(src="@/assets/img/default_hd.jpg")
   div.name
     slot
@@ -43,13 +54,17 @@ div.chat-item(:class="{current}")
 <script>
 export default {
   name: 'ChatItem',
+  props: {
+    id: String
+  },
   data () {
     return {
-      current: false
     }
   },
   computed: {
-    
+    isCurrent() {
+      return this.$store.state.currentChat.who == this.id;
+    }
   }
 }
 </script>
