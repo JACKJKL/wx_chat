@@ -2,7 +2,7 @@
 
 >模拟微信界面实现一个简单的聊天室，后端服务采用nodejs+ws模块搭建websocket服务。前端简介采用vue.js+vuex,less,pug等编写。
 
-后端代码位于 /server 目录下, 注意ws模块依赖
+后端代码位于 /server 目录下, 注意ws模块依赖(npm install ws)
 ```bash
 node serve.js
 ```
