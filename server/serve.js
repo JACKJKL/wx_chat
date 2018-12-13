@@ -8,7 +8,7 @@ let clientLive = [];
 
 // 开启websocket 端口监听
 const wss = new WebSocket.Server({
-  port: 8081,
+  port: 18081,
 });
 
 wss.on('connection', connection);

@@ -17,16 +17,16 @@
   background-size: cover;
   height: 100%;
   .main {
-    height: 80%;
-    min-height: 600px;
+    height: 720px;
+    // min-height: 600px;
     padding-top: 100px;
     transition: padding .3s linear;
     -webkit-transition: padding .3s linear;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     .main-inner {
-      max-width: 1000px;
-      min-width: 800px;
+      width: 1000px;
+      // min-width: 800px;
       height: 100%;
       margin: 0 auto;
       border-radius: 3px;
@@ -179,24 +179,4 @@
         }
     }
   }
-}
-
-// 更改滚动条样式，仅支持webkit内核浏览器
-.topnav_box::-webkit-scrollbar
-{  
-  width: 5px; 
-  height:10px;
-  background-color:#666;
-}
-.topnav_box::-webkit-scrollbar-track
-{  
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  border-radius: 10px; 
-  background-color:#444;
-}
-.topnav_box::-webkit-scrollbar-thumb
-{  
-  border-radius: 10px;  
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  background-color:#666;
 }

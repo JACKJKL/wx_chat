@@ -19,7 +19,7 @@ class WSocket {
   open (c) {
     // 貌似不在短时间内调用onopen 会自动调用，所以在此处new
     try {
-      this.wss = new WebSocket("ws://localhost:8081");
+      this.wss = new WebSocket("ws://localhost:18081");
     } catch( err ) {
       alert('连接服务器失败');
     }

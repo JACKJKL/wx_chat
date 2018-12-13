@@ -45,7 +45,7 @@
 
 <template lang="pug">
 div.chat-item(:class="{'current': isCurrent}")
-  div.avatar.new-msg
+  div.avatar(:class="{'new-msg': isHasNewMsg}")
     img(src="@/assets/img/default_hd.jpg")
   div.name
     slot
@@ -62,8 +62,13 @@ export default {
     }
   },
   computed: {
+    // 是否当前
     isCurrent() {
       return this.$store.state.currentChat.who == this.id;
+    },
+    // 是否显示消息小红点
+    isHasNewMsg () {
+      return this.$store.state.noRead.includes(String(this.id));
     }
   }
 }
