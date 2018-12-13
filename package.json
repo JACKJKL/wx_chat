@@ -1,7 +1,7 @@
 {
   "name": "wx_chat",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "模拟微信界面实现一个简单的聊天室",
   "author": "1160224892@qq.com",
   "private": true,
   "scripts": {
